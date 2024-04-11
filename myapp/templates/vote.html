@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block title %}Vote{% endblock %}
+
+{% block main %}
+<!-- <style>
+    .popup{
+        position: fixed;
+        top: 75%;
+        left: 50%;
+        z-index: 2;
+        background-color: gray;
+        font-weight: bold;
+    }
+    .hidepopup{
+        visibility: hidden;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Cast Your Vote</h3>
+            </div>
+
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2>{{question.question}}</h2>
+                    </div>
+                </div>
+
+                <div class="row" >
+                    <div class="col-lg-12">
+                        <hr />
+                       
+                        <form onsubmit="vote(event)" id="form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <div class="radio">
+                                    {% for option in options %}
+                                    <label>
+                                        <input type="radio" name="poll" value={{option.option_id}} required>
+                                        {{option.option}}
+                                    </label> &nbsp;
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+
+                            <hr />
+
+                            <button type="submit" class="btn btn-info">
+                                Submit
+                            </button>
+                        </form>
+                        <div id="questionid" style="visibility: hidden;">{{questionid}}</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="popup text-light btn hidepopup" id="votemsg">
+    Already vote
+</div> -->
+<style>
+    body {
+        background-color: #1f1d1d;
+        color: aliceblue;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .panel {
+        background-color: #252525;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 5%;
+    }
+
+    .panel-title {
+        color: #fff;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .panel-body {
+        color: #fff;
+    }
+
+    form label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    input[type="radio"] {
+        margin-right: 10px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #007bff;
+        outline: none;
+        cursor: pointer;
+    }
+
+    input[type="radio"]:checked {
+        background-color: #007bff;
+    }
+
+    .btn {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    .popup {
+        position: fixed;
+        top: 75%;
+        left: 50%;
+        z-index: 2;
+        background-color: #333;
+        color: #fff;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transform: translate(-50%, -50%);
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.3s linear;
+    }
+
+    .popup.show {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
+
+<body>
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Cast Your Vote</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2>{{question.question}}</h2>
+                    </div>
+                </div>
+                <hr />
+                <form onsubmit="vote(event)" id="form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {% for option in options %}
+                        <label>
+                            <input type="radio" name="poll" value="{{option.option_id}}" required>
+                            {{option.option}}
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <hr />
+                    <button type="submit" class="btn">Submit</button>
+                </form>
+                <div id="questionid" style="display: none;">{{questionid}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Popup Message -->
+<div class="popup" id="votemsg"></div>
+</body>
+<script>
+    function vote(event) {
+        event.preventDefault();
+        let form = document.getElementById('form-data');
+        let option = form.poll.value;
+        let user_id = localStorage.getItem('myData');
+        if (user_id == null) {
+            window.location.href = 'http://localhost:8000/login';
+            return;
+        }
+        let question_id = document.getElementById('questionid').innerHTML;
+        const dataToSend = {
+            user_id: user_id,
+            option: option,
+            question: question_id
+        };
+        fetch('/savevote/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataToSend)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Network response was not ok.');
+        })
+        .then(data => {
+            const popup = document.getElementById("votemsg");
+            let status = data['status'];
+            if (status === 0) {
+                popup.innerHTML = 'Already voted';
+            } else if (status === 2) {
+                popup.innerHTML = 'Voting finished';
+            } else {
+                popup.innerHTML = 'Vote successful';
+            }
+            popup.classList.add('show');
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+{% endblock %}

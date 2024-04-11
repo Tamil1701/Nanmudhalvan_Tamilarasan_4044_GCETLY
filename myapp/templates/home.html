@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Voting{% endblock %}
+
+{% block main %}
+<!-- <body style="background: #1f1d1d; color: aliceblue;">
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2 card" style="display: flex; padding: 5px; margin: 5% 5% 5% 5%; border: #252525; outline: 2px;">
+        <div class="panel panel-default" style="padding: 5%;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Available Polls</h3>
+            </div>
+            <ul class="list-group">
+                {% for q in questions %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                     <strong>{{q.question}}</strong> 
+                  </div>
+                  <div>
+                      <a href="{% url 'vote' q.question_id %}" class="btn btn-info text-light" style="font-weight: bold;">Vote</a>
+                      <a href="{% url 'result' q.question_id %}" class="btn btn-info text-light" style="font-weight: bold;">Result</a>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul> -->
+            <!-- <ul class="list-group">
+                <li class="list-group-item">
+                    <strong>Which language is easier to learn?</strong>
+                    <span class="pull-right">
+                        <a href="#" class="btn btn-info btn-xs" >Vote</a> &nbsp;
+                        <a href="#" class="btn btn-default btn-xs">View Results</a> &nbsp;
+                    </span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Which operating system do you use?</strong>
+                    <span class="pull-right">
+                        <a href="#" class="btn btn-info btn-xs">Vote</a> &nbsp;
+                        <a href="#" class="btn btn-default btn-xs">View Results</a> &nbsp;
+                    </span>
+                </li>
+            </ul> -->
+
+        </div>
+    </div>
+</div>
+</body>
+<!-- 
+{% for option in q.options %}
+<p>{{option.option}}</p>
+
+{% endfor %} -->
+
+<title>Available Polls - Dark Theme</title>
+    <style>
+        body {
+            background-color: #1f1d1d;
+            color: aliceblue;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 5% 5%;
+            padding: 20px;
+            border: 2px solid #252525;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .panel-title {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .list-group-item {
+            background-color: #333;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 15px;
+            color: #fff;
+        }
+
+        .list-group-item strong {
+            font-weight: bold;
+        }
+
+        .btn {
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-info {
+            background-color: #007bff;
+            border: 1px solid #007bff;
+        }
+
+        .btn-info:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2" style="margin-left: 10%;">
+            <div class="panel panel-default">
+                <br>
+                <div class="panel-heading">
+                    <h3 class="panel-title">Available Polls</h3>
+                </div>
+                <ul class="list-group">
+                    {% for q in questions %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{q.question}}</strong>
+                        </div>
+                        <div>
+                            <a href="{% url 'vote' q.question_id %}" class="btn btn-info">Vote</a>
+                            <a href="{% url 'result' q.question_id %}" class="btn btn-info">Result</a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

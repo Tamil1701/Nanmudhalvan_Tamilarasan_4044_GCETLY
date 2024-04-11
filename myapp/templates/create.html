@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Create Poll{% endblock %}
+
+{% block main %}
+<style>
+    body {
+        background-color: #1f1d1d;
+        color: aliceblue;
+    }
+
+    .panel {
+        background-color: #333;
+        border-color: #333;
+    }
+
+    .panel-title {
+        color: #fff;
+    }
+
+    .form-control {
+        background-color: #333;
+        color: #fff;
+        border-color: #555;
+    }
+
+    label {
+        color: #fff;
+    }
+
+    button.btn {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    button.btn:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    button.btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    button.btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    button.btn-info {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+    }
+
+    button.btn-info:hover {
+        background-color: #117a8b;
+        border-color: #117a8b;
+    }
+</style>
+
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Create A New Poll</h3>
+            </div>
+            <form id="form-data" onsubmit="submitForm(event)">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="datetime">Result Publish DateTime:</label>
+                                <input name="datetime" id="datetime" type="datetime-local" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="question">Enter Poll Question</label>
+                                <textarea name="question" id="question" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="optionContainer">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="option1">Option 1</label>
+                                <input type="text" name="option" class="form-control option" placeholder="Enter option 1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary text-light" onclick="addOption()">Add Option</button>
+                    <button type="submit" class="btn btn-info">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let optionCounter = 2;
+
+    function addOption() {
+        const container = document.getElementById("optionContainer");
+        const newOptionDiv = document.createElement('div');
+        newOptionDiv.className = 'col-lg-4';
+
+        const label = document.createElement('label');
+        label.textContent = `Option ${optionCounter}`;
+        label.style.color = 'white';
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'option';
+        input.className = 'form-control option';
+        input.placeholder = `Enter option ${optionCounter}`;
+        input.required = true;
+        input.style.backgroundColor = '#333';
+        input.style.color = 'white';
+
+        newOptionDiv.appendChild(label);
+        newOptionDiv.appendChild(input);
+
+        container.appendChild(newOptionDiv);
+
+        optionCounter++;
+    }
+
+    function submitForm(event) {
+        event.preventDefault();
+
+        const form = document.getElementById("form-data");
+        const options = Array.from(form.querySelectorAll('.option')).map(input => input.value);
+        const dateTime = form.datetime.value;
+        const question = form.question.value;
+
+        const dataToSend = {
+            question: question,
+            options: options.filter(option => option.trim() !== ''),
+            datetime: dateTime
+        };
+
+        fetch('/createpoll/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataToSend)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Network response was not ok.');
+        })
+        .then(data => {
+            console.log(data); // Handle success response
+            // Redirect or show success message as needed
+        })
+        .catch(error => {
+            console.error('Error:', error); // Handle error
+            // Show error message or handle error state
+        });
+    }
+</script>
+{% endblock %}

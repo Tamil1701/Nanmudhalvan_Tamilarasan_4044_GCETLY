@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Results{% endblock %}
+
+{% block main %}
+<!-- <body style="background: #1f1d1d; color: aliceblue;">
+<div class="row">
+
+    <div class="col-lg-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            {% if isShowResult %}
+            <h2>The result will be published on {{result_date}}</h2>
+            {% else %}
+            <br>
+            <div class="panel-heading">
+                <h3 class="panel-title">Poll Result</h3>
+            </div><br>
+
+            <div class="panel-body">
+                <h3>{{question.question}}</h3>
+            </div>
+            <div class="card" style="background: rgb(116, 248, 116); border-radius: 20px; color: aliceblue; width: auto;">
+                <h1 style="padding: 4%;">Winner is</h1>
+                <div class="col-md-6" style="background: white; border-radius: 20px; padding: 2%; margin: 8px;"><h2 style="color: black; padding: 5%; ">{{winner}}</h2></div>
+            </div><br>
+
+
+            <ul class="list-group">
+                {% for option in options %}
+
+                <li class="list-group-item"><b>{{option.option}}</b> &mdash; <strong>{{option.cnt}}</strong></li>
+                
+                {% endfor %}
+            </ul>
+
+            <div class="panel-footer card" style="display: flex; background: aliceblue; text-align: center; justify-content: space-between; margin: 5%;">
+                <strong>Total Number of votes collected</strong> <strong><span style="font-size: 20px; padding: 5%; color: #e46959;" >{{totalcount}}</span></strong>
+            </div>
+            <h2>{{winner}} Won</h2>
+{% endif %}
+        </div>
+    </div>
+</div></body> -->
+
+<style>
+    body {
+        background-color: #1f1d1d;
+        color: aliceblue;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .panel {
+        background-color: #252525;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 5%;
+    }
+
+    .panel-title {
+        color: #fff;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .panel-body {
+        color: #fff;
+        font-size: 18px;
+    }
+
+    .card {
+        background-color: #74f874;
+        border-radius: 20px;
+        color: aliceblue;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .card-inner {
+        background-color: white;
+        border-radius: 20px;
+        padding: 20px;
+        margin: 10px;
+        color: black;
+    }
+
+    .list-group-item {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 15px;
+    }
+
+    .list-group-item b {
+        font-weight: bold;
+    }
+
+    .panel-footer {
+        background-color: aliceblue;
+        color: #1f1d1d;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    .winner-message {
+        font-size: 24px;
+        font-weight: bold;
+        color: #fff;
+        padding: 20px;
+    }
+
+    .total-count {
+        font-size: 20px;
+        padding: 10px;
+        color: #e46959;
+    }
+</style>
+
+<body>
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            {% if isShowResult %}
+                <h2 class="panel-title">The result will be published on {{result_date}}</h2>
+            {% else %}
+                <div class="panel-heading">
+                    <h3 class="panel-title">Poll Result</h3>
+                </div>
+
+                <div class="panel-body">
+                    <h3>{{question.question}}</h3>
+                </div>
+
+                <div class="card">
+                    <h1 class="winner-message" style="text-align: center; font-size: 30px;">Winner is</h1>
+                    <div class="card-inner">
+                        <h2 style="text-align: center;">{{winner}}</h2>
+                    </div>
+                </div>
+
+                <ul class="list-group">
+                    {% for option in options %}
+                        <li class="list-group-item"><b>{{option.option}}</b> &mdash; <strong>{{option.cnt}}</strong></li>
+                    {% endfor %}
+                </ul>
+
+                <div class="panel-footer">
+                    <strong>Total Number of votes collected</strong> <span class="total-count">{{totalcount}}</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+{% endblock %}
